@@ -4,11 +4,19 @@ class Chat
   RESPONSES = [
     {
       text: "Hello, this is 911 Automated Emergency for San Francisco.  Please select your Language.",
-      buttons: [ "English", "Spanish", "Other" ]
+      buttons: [
+        {text: "English", postback: "LANG_EN"},
+        {text: "Spanish", postback: "LANG_ES"},
+        {text: "Other", postback: "LANG_OTHER"}
+      ]
     },
     {
       text: "OK! What type of assistance do you need?",
-      buttons: [ "I'm having an Emergency!", "I just need info.", "I want to talk to an Operator." ]
+      buttons: [
+        {text: "I'm having an Emergency!", postback: "NEED_HELP"},
+        {text: "I just need info.", postback: "NEED_INFO"},
+        {text: "I want to talk to an Operator.", postback: "NEED_OPERATOR"}
+      ]
     }
   ]
 
@@ -53,7 +61,7 @@ class Chat
             payload: {
               template_type: "button",
               text: text,
-              buttons: buttons
+              buttons: buttons.map{|button| {type: "postback", title: button[:text], postback: buttons[:postback]} }
             }
           }
         }
