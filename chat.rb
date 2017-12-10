@@ -46,10 +46,16 @@ class Chat
     [current_chat[:user][:first_name], current_chat[:user][:last_name]].compact.join(' ')
   end
 
-  def add_message text, postback=nil
-    messages << text
-    puts "added message #{text} to user #{sender_id}, they have #{messages.count}"
-    case postback
+  def add_message data
+    messages << data[:text]
+    puts "added message #{data[:text]} to user #{sender_id}, they have #{messages.count}"
+
+    if data[:location]
+      puts "got location: #{data[:location]}"
+      current_chat[:location] = data[:location]
+    end
+
+    case data[:postback]
     when /^HELP_(\w+)/
       puts "got help: #{$1}"
       current_chat[:help] = $1
@@ -57,8 +63,8 @@ class Chat
       puts "got need #{$1}"
       current_chat[:need] = $1
     when /^LANG_/
-      puts "got lang #{text}"
-      current_chat[:lang] = postback
+      puts "got lang #{data[:text]}"
+      current_chat[:lang] = data[:postback]
     when nil
       puts "not a postback"
     else
