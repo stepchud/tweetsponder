@@ -26,7 +26,8 @@ post '/sf911' do
   CHATS[sender_id][:messages] << message_text
   puts "POST #{response_url}"
   puts "response data: #{format_response(message_text)}"
-  HTTParty.post(response_url, body: format_response(message_text).to_json)
+  @response_result = HTTParty.post(response_url, body: format_response(message_text).to_json)
+  puts @response_result
   200
 end
 
@@ -49,13 +50,13 @@ def sender_id
   messaging["sender"]["id"]
 end
 
-def fb_user
+def page_scoped_user
   "https://wwww.facebook.com/#{sender_id}"
 end
 
 def format_response text
   {
     "recipient": {"id": sender_id},
-    "message": {"text": text}
+    "message": {"text": "Got your #{CHATS[sender_id][:messages].count} message: #{text}"}
   }
 end
