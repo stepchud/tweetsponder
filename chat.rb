@@ -23,7 +23,7 @@ class Chat
 
   def initialize sender_id, user
     @sender_id = sender_id
-    current_chat ||= {
+    CHATS[sender_id] ||= {
       user: user,
       messages:[]
     }
