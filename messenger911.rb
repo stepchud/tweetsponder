@@ -57,6 +57,6 @@ end
 def format_response text
   {
     "recipient": {"id": sender_id},
-    "message": {"text": "Got your #{CHATS[sender_id][:messages].count} message: #{text}"}
+    "message": {"text": "Got your #{@chat.messages.count} message: #{text}"}
   }
 end
