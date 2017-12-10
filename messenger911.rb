@@ -28,8 +28,9 @@ post '/sf911' do
   puts "response data: #{format_response(message_text)}"
   @response_result = HTTParty.post(
     response_url,
-    headers: { 'Content-Type' => 'application/json' }
-    body: format_response(message_text).to_json)
+    headers: { 'Content-Type' => 'application/json' },
+    body: format_response(message_text).to_json
+  )
   puts "raw body: #{@response_result.response.body}"
   puts "parsed body: #{@response_result.parsed_response["data"]}"
   200
