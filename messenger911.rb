@@ -26,8 +26,12 @@ post '/sf911' do
   CHATS[sender_id][:messages] << message_text
   puts "POST #{response_url}"
   puts "response data: #{format_response(message_text)}"
-  @response_result = HTTParty.post(response_url, body: format_response(message_text).to_json)
-  puts @response_result
+  @response_result = HTTParty.post(
+    response_url,
+    headers: { 'Content-Type' => 'application/json' }
+    body: format_response(message_text).to_json)
+  puts "raw body: #{@response_result.response.body}"
+  puts "parsed body: #{@response_result.parsed_response["data"]}"
   200
 end
 
@@ -38,7 +42,6 @@ def response_url
 end
 
 def messaging
-  puts @message_body["entry"][0]["messaging"]
   @message_body["entry"][0]["messaging"][0]
 end
 
