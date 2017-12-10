@@ -53,7 +53,7 @@ def message_data
 end
 
 def message_text
-  if messaging["message"]["text"] =~ /\n+-\n+-\n+/
+  if messaging["message"]["text"] =~ /\d+-\d+-\d+/
     {text: messaging["message"]["text"], phone_number:messaging["message"]["text"]}
   else
     {text: messaging["message"]["text"]}
