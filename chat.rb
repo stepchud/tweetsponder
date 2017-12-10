@@ -11,11 +11,20 @@ class Chat
   }
 
   NEED_RESPONSE = {
-    text: "OK! What type of assistance do you need?",
+    text: "OK! What can we do for you?",
     buttons: [
-      {title: "I'm having an Emergency!", payload: "NEED_HELP"},
+      {title: "I NEED HELP!", payload: "NEED_HELP"},
       {title: "I just need info.", payload: "NEED_INFO"},
-      {title: "I want to talk to an Operator.", payload: "NEED_OPERATOR"}
+      {title: "Talk to an Operator.", payload: "NEED_OPERATOR"}
+    ]
+  }
+
+  HELP_RESPONSE = {
+    text: "OK! What type of help do you need?",
+    buttons: [
+      {title: "MEDICAL 🚑 ", payload: "HELP_MEDICAL"},
+      {title: "FIRE 🚒 ", payload: "HELP_FIRE"},
+      {title: "POLICE 🚓 ", payload: "HELP_POLICE"}
     ]
   }
 
@@ -37,12 +46,15 @@ class Chat
     messages << text
     puts "added message #{text} to user #{sender_id}, they have #{messages.count}"
     case postback
-    when /^NEED_/
-      puts "got need #{text}"
-      current_chat[:need] = text
+    when /^HELP_(\w+)/
+      puts "got help: #{$1}"
+      current_chat[:help] = $1
+    when /^NEED_(\w+)/
+      puts "got need #{$1}"
+      current_chat[:need] = $1
     when /^LANG_/
       puts "got lang #{text}"
-      current_chat[:lang] = text
+      current_chat[:lang] = postback
     when nil
       puts "not a postback"
     else
@@ -58,8 +70,10 @@ class Chat
   def get_response
     response = if messages.count == 1
       FIRST_RESPONSE
+    elsif current_chat[:help]
+      {text: "Ok, please describe your #{current_chat[:help].downcase} emergency."}
     elsif current_chat[:need]
-      {text: "Ok, please describe your #{current_chat[:need]} emergency."}
+      HELP_RESPONSE
     elsif current_chat[:lang]
       NEED_RESPONSE
     else
