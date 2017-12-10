@@ -53,7 +53,11 @@ def message_data
 end
 
 def message_text
-  {text: messaging["message"]["text"]}
+  if messaging["message"]["text"] =~ /\n+-\n+-\n+/
+    {text: messaging["message"]["text"], phone_number:messaging["message"]["text"]}
+  else
+    {text: messaging["message"]["text"]}
+  end
 end
 
 def postback_data

@@ -48,29 +48,33 @@ class Chat
   end
 
   def add_message data
-    messages << data[:text]
-    puts "added message #{data[:text]} to user #{sender_id}, they have #{messages.count}"
-
     if data[:location]
       puts "got location: #{data[:location]}"
       current_chat[:location] = data[:location]
+    elsif data[:postback]
+      case data[:postback]
+      when /^HELP_(\w+)/
+        puts "got help: #{$1}"
+        current_chat[:help] = $1
+      when /^NEED_(\w+)/
+        puts "got need #{$1}"
+        current_chat[:need] = $1
+      when /^LANG_/
+        puts "got lang #{data[:text]}"
+        current_chat[:lang] = data[:postback]
+      when nil
+        puts "not a postback"
+      else
+        puts 'UKNOWN POSTBACK RESPONSE'
+      end
+    elsif data[:phone_number]
+      puts "got phone #{data[:phone_number]}"
+      current_chat[:phone_number] = data[:phone_number]
+    else
+      messages << data[:text]
+      puts "added message #{data[:text]} to user #{sender_id}, they have #{messages.count}"
     end
 
-    case data[:postback]
-    when /^HELP_(\w+)/
-      puts "got help: #{$1}"
-      current_chat[:help] = $1
-    when /^NEED_(\w+)/
-      puts "got need #{$1}"
-      current_chat[:need] = $1
-    when /^LANG_/
-      puts "got lang #{data[:text]}"
-      current_chat[:lang] = data[:postback]
-    when nil
-      puts "not a postback"
-    else
-      puts 'UKNOWN POSTBACK RESPONSE'
-    end
   end
 
   def messages
@@ -78,8 +82,14 @@ class Chat
   end
 
   def get_response
-    response = if current_chat[:help]
-      {text: "Ok, please describe your #{current_chat[:help].downcase} emergency."}
+    response = if current_data[:description]
+      {text: "I have all the information I need. I will send you #{current_chat[:help].downcase.capitalize} help is on the way."}
+    elsif current_chat[:phone_number]
+      {text: "Got your phone number. Please describe your #{current_chat[:help].downcase} emergency."}
+    elsif current_chat[:location]
+      {text: "I found your location. Please send your phone number so the emergency responders can reach you if needed."}
+    elsif current_chat[:help]
+      {text: "In order to send help, I need your location. Please share your location by clicking the blue + and choosing location."}
     elsif current_chat[:need]
       HELP_RESPONSE
     elsif current_chat[:lang]
@@ -88,8 +98,6 @@ class Chat
       greeting = FIRST_RESPONSE
       greeting[:text].prepend("Hello #{current_user}, ")
       greeting
-    # else
-    #   {text: "Thanks for telling us. We got your message (#{messages.last})"}
     end
     formatted = format_response response
     puts formatted.to_json
