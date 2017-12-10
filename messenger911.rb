@@ -23,7 +23,7 @@ post '/sf911' do
   puts "RECEIVED: #{@message_body}"
   user = HTTParty.get("https://graph.facebook.com/v2.6/#{sender_id}?fields=first_name,last_name,locale&access_token=#{access_token}").parsed_response
   @chat = Chat.new(sender_id, user)
-  @chat.add_message message_text
+  @chat.add_message *message_data
   @response_result = HTTParty.post(
     response_url,
     headers: { 'Content-Type' => 'application/json' },
@@ -48,8 +48,10 @@ def messaging
   @message_body["entry"][0]["messaging"][0]
 end
 
-def message_text
-  messaging["message"]["text"]
+def message_data
+  messaging["message"] ?
+    messaging["message"]["text"] :
+    [ messaging["postback"]["title"] : messaging["postback"]["payload"] ]
 end
 
 def sender_id
