@@ -19,13 +19,15 @@ get '/sf911' do
 end
 
 post '/sf911' do
-  @message_body = JSON.parse(request.body.string)
-  @chat = Chat.new(sender_id)
+  @message_body = JSON.parse request.body.string
+  user = JSON.parse HTTParty.get("https://graph.facebook.com/v2.6/#{sender_id}?fields=first_name,last_name,locale&access_token=#{access_token}")
+  puts "got user #{user}"
+  @chat = Chat.new(sender_id, user)
   @chat.add_message message_text
   @response_result = HTTParty.post(
     response_url,
     headers: { 'Content-Type' => 'application/json' },
-    body: format_response(message_text).to_json
+    body: @chat.get_response.to_json
   )
   puts "raw body: #{@response_result.response.body}"
   puts "parsed body: #{@response_result.parsed_response}"
@@ -34,8 +36,12 @@ end
 
 private
 
+def access_token
+  ENV['PAGE_ACCESS_TOKEN']
+end
+
 def response_url
-  "https://graph.facebook.com/v2.6/me/messages?access_token=#{ENV['PAGE_ACCESS_TOKEN']}"
+  "https://graph.facebook.com/v2.6/me/messages?access_token=#{access_token}"
 end
 
 def messaging
@@ -52,11 +58,4 @@ end
 
 def page_scoped_user
   "https://wwww.facebook.com/#{sender_id}"
-end
-
-def format_response text
-  {
-    "recipient": {"id": sender_id},
-    "message": {"text": "Got your #{@chat.messages.count} message: #{text}"}
-  }
 end
