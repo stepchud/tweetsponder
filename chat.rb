@@ -61,7 +61,7 @@ class Chat
             payload: {
               template_type: "button",
               text: text,
-              buttons: buttons.map{|button| {type: "postback", title: button[:text], postback: buttons[:postback]} }
+              buttons: buttons.map{|button| {type: "postback", title: button[:text], postback: button[:postback]} }
             }
           }
         }
