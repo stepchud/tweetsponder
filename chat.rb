@@ -5,17 +5,17 @@ class Chat
     {
       text: "Hello, this is 911 Automated Emergency for San Francisco.  Please select your Language.",
       buttons: [
-        {text: "English", postback: "LANG_EN"},
-        {text: "Spanish", postback: "LANG_ES"},
-        {text: "Other", postback: "LANG_OTHER"}
+        {title: "English", payload: "LANG_EN"},
+        {title: "Spanish", payload: "LANG_ES"},
+        {title: "Other", payload: "LANG_OTHER"}
       ]
     },
     {
       text: "OK! What type of assistance do you need?",
       buttons: [
-        {text: "I'm having an Emergency!", postback: "NEED_HELP"},
-        {text: "I just need info.", postback: "NEED_INFO"},
-        {text: "I want to talk to an Operator.", postback: "NEED_OPERATOR"}
+        {title: "I'm having an Emergency!", payload: "NEED_HELP"},
+        {title: "I just need info.", payload: "NEED_INFO"},
+        {title: "I want to talk to an Operator.", payload: "NEED_OPERATOR"}
       ]
     }
   ]
@@ -61,7 +61,7 @@ class Chat
             payload: {
               template_type: "button",
               text: text,
-              buttons: buttons.map{|button| {type: "postback", title: button[:text], postback: button[:postback]} }
+              buttons: buttons.map{|button| {type: "postback"}.merge(button) }
             }
           }
         }
