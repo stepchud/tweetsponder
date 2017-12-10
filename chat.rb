@@ -73,23 +73,22 @@ class Chat
   end
 
   def messages
-    puts "current_chat=#{current_chat}"
     current_chat[:messages]
   end
 
   def get_response
-    response = if current_chat[:lang].nil?
-      greeting = FIRST_RESPONSE
-      greeting[:text].prepend("Hello #{current_user}, ")
-      greeting
-    elsif current_chat[:help]
+    response = if current_chat[:help]
       {text: "Ok, please describe your #{current_chat[:help].downcase} emergency."}
     elsif current_chat[:need]
       HELP_RESPONSE
     elsif current_chat[:lang]
       NEED_RESPONSE
-    else
-      {text: "Thanks for telling us. We got your message (#{messages.last})"}
+    else # first interaction
+      greeting = FIRST_RESPONSE
+      greeting[:text].prepend("Hello #{current_user}, ")
+      greeting
+    # else
+    #   {text: "Thanks for telling us. We got your message (#{messages.last})"}
     end
     formatted = format_response response
     puts formatted.to_json
