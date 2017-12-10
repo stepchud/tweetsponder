@@ -51,6 +51,7 @@ class Chat
   end
 
   def messages
+    puts "current_chat=#{current_chat}"
     current_chat[:messages]
   end
 
