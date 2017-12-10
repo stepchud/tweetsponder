@@ -70,6 +70,9 @@ class Chat
     elsif data[:phone_number]
       puts "got phone #{data[:phone_number]}"
       current_chat[:phone_number] = data[:phone_number]
+    elsif current_chat[:phone_number]
+      puts "got description #{data[:description]}"
+      current_chat[:description] = data[:text]
     else
       messages << data[:text]
       puts "added message #{data[:text]} to user #{sender_id}, they have #{messages.count}"
