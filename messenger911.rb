@@ -58,7 +58,7 @@ end
 
 def postback_data
   if messaging["postback"]
-    {text: messaging["postback"]["title"], payload: messaging["postback"]["payload"]}
+    {text: messaging["postback"]["title"], postback: messaging["postback"]["payload"]}
   end
 end
 
