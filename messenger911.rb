@@ -17,6 +17,6 @@ get '/sf911' do
 end
 
 post '/sf911' do
-  puts "GOT WEBHOOK #{request.body}"
+  puts "GOT WEBHOOK #{request.body.string}"
   200
 end
