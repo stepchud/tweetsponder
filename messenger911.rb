@@ -1,5 +1,5 @@
 require 'sinatra'
-require 'facebook-messenger'
+require 'facebook/messenger'
 
 get '/' do
   "Hello Home"
