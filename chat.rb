@@ -2,7 +2,7 @@ class Chat
   CHATS = {}
 
   FIRST_RESPONSE = {
-    text: "Hello, this is 911 Automated Emergency for San Francisco.  Please select your Language.",
+    text: "this is 911 Automated Emergency for San Francisco.  Please select your Language.",
     buttons: [
       {title: "English", payload: "LANG_EN"},
       {title: "Spanish", payload: "LANG_ES"},
@@ -42,6 +42,10 @@ class Chat
     CHATS[sender_id]
   end
 
+  def current_user
+    [current_chat[:user][:first_name], current_chat[:user][:last_name]].compact.join(' ')
+  end
+
   def add_message text, postback=nil
     messages << text
     puts "added message #{text} to user #{sender_id}, they have #{messages.count}"
@@ -68,8 +72,10 @@ class Chat
   end
 
   def get_response
-    response = if messages.count == 1
-      FIRST_RESPONSE
+    response = if current_chat[:lang].nil?
+      greeting = FIRST_RESPONSE
+      greeting[:text].prepend("Hello #{current_user}, ")
+      greeting
     elsif current_chat[:help]
       {text: "Ok, please describe your #{current_chat[:help].downcase} emergency."}
     elsif current_chat[:need]
