@@ -20,7 +20,7 @@ end
 
 post '/sf911' do
   @message_body = JSON.parse request.body.string
-  user = JSON.parse HTTParty.get("https://graph.facebook.com/v2.6/#{sender_id}?fields=first_name,last_name,locale&access_token=#{access_token}")
+  user = JSON.parse HTTParty.get("https://graph.facebook.com/v2.6/#{sender_id}?fields=first_name,last_name,locale&access_token=#{access_token}").string
   puts "got user #{user}"
   @chat = Chat.new(sender_id, user)
   @chat.add_message message_text
