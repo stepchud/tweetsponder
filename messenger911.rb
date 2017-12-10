@@ -20,7 +20,7 @@ get '/sf911' do
 end
 
 post '/sf911' do
-  @message_body = JSON.parse(request.body)
+  @message_body = JSON.parse(request.body.string)
   puts @message_body
   CHATS[sender_id] ||= {messages:[]}
   CHATS[sender_id][:messages] << message_text
