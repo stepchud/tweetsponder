@@ -1,9 +1,6 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    facebook-messenger (1.0.0)
-      httparty (~> 0.13, >= 0.13.7)
-      rack (>= 1.6.4)
     httparty (0.15.6)
       multi_xml (>= 0.5.2)
     multi_xml (0.6.0)
@@ -22,7 +19,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  facebook-messenger
+  httparty
   sinatra
 
 RUBY VERSION
