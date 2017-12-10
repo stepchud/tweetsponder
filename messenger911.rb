@@ -24,7 +24,9 @@ post '/sf911' do
   CHATS[sender_id] ||= {messages:[]}
   puts "adding message #{message_text}"
   CHATS[sender_id][:messages] << message_text
-  HTTParty.post(response_url, body: response(message_text))
+  puts "POST #{response_url}"
+  puts "response data: #{format_response(message_text)}"
+  HTTParty.post(response_url, body: format_response(message_text).to_json)
   200
 end
 
@@ -51,7 +53,7 @@ def fb_user
   "https://wwww.facebook.com/#{sender_id}"
 end
 
-def response text
+def format_response text
   {
     "recipient": {"id": sender_id},
     "message": {"text": text}
