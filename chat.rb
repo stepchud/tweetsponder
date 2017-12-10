@@ -82,7 +82,7 @@ class Chat
   end
 
   def get_response
-    response = if current_data[:description]
+    response = if current_chat[:description]
       {text: "I have all the information I need. I will send you #{current_chat[:help].downcase.capitalize} help is on the way."}
     elsif current_chat[:phone_number]
       {text: "Got your phone number. Please describe your #{current_chat[:help].downcase} emergency."}
