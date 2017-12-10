@@ -21,7 +21,6 @@ end
 post '/sf911' do
   @message_body = JSON.parse request.body.string
   user = HTTParty.get("https://graph.facebook.com/v2.6/#{sender_id}?fields=first_name,last_name,locale&access_token=#{access_token}").parsed_response
-  puts "got user #{user}"
   @chat = Chat.new(sender_id, user)
   @chat.add_message message_text
   @response_result = HTTParty.post(
@@ -54,8 +53,4 @@ end
 
 def sender_id
   messaging["sender"]["id"]
-end
-
-def page_scoped_user
-  "https://wwww.facebook.com/#{sender_id}"
 end

@@ -33,7 +33,9 @@ class Chat
 
   def get_response
     response = RESPONSES[messages.count-1] || {text: "Thanks for telling us. We got your message (#{messages.last})"}
-    format_response response
+    formatted = format_response response
+    puts formatted.to_json
+    formatted
   end
 
   def format_response text:, buttons: []
