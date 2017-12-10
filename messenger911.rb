@@ -51,7 +51,7 @@ end
 def message_data
   messaging["message"] ?
     messaging["message"]["text"] :
-    [ messaging["postback"]["title"] : messaging["postback"]["payload"] ]
+    [ messaging["postback"]["title"], messaging["postback"]["payload"] ]
 end
 
 def sender_id
