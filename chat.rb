@@ -44,7 +44,7 @@ class Chat
 
   def current_user
     puts "current_user data #{current_chat[:user]}"
-    [current_chat[:user][:first_name], current_chat[:user][:last_name]].compact.join(' ')
+    [current_chat[:user]['first_name'], current_chat[:user]['last_name']].compact.join(' ')
   end
 
   def add_message data
