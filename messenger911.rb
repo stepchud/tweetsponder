@@ -5,7 +5,7 @@ get '/' do
   "Hello Home"
 end
 
-post '/sf911' do
+get '/sf911' do
   if ENV['FB_CONFIG_TOKEN'] == params['hub.verify']
     puts "verified!"
     params['hub.challenge']
