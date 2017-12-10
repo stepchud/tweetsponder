@@ -83,11 +83,11 @@ class Chat
 
   def get_response
     response = if current_chat[:description]
-      {text: "I have all the information I need. I will send you #{current_chat[:help].downcase.capitalize} help is on the way."}
+      {text: "I have all the information I need. #{current_chat[:help].downcase.capitalize} help is on the way."}
     elsif current_chat[:phone_number]
       {text: "Got your phone number. Please describe your #{current_chat[:help].downcase} emergency."}
     elsif current_chat[:location]
-      {text: "I found your location. Please send your phone number so the emergency responders can reach you if needed."}
+      {text: "I found your location. Please send your phone number so the emergency crew can reach you when they arrive."}
     elsif current_chat[:help]
       {text: "In order to send help, I need your location. Please share your location by clicking the blue + and choosing location."}
     elsif current_chat[:need]
