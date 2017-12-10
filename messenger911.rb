@@ -21,8 +21,8 @@ end
 
 post '/sf911' do
   @message_body = JSON.parse(request.body.string)
-  puts @message_body
   CHATS[sender_id] ||= {messages:[]}
+  puts "adding message #{message_text}"
   CHATS[sender_id][:messages] << message_text
   HTTParty.post(response_url, body: response(message_text))
   200
@@ -35,7 +35,8 @@ def response_url
 end
 
 def messaging
-  @message_body["entry"]["messaging"].first
+  puts @message_body["entry"][0]["messaging"]
+  @message_body["entry"][0]["messaging"][0]
 end
 
 def message_text
