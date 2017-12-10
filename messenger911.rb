@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'json'
 require 'httparty'
-require 'chat'
+require './chat'
 
 get '/' do
   "Hello Homie"
