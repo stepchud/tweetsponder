@@ -1,8 +1,7 @@
 require 'sinatra'
 require 'json'
 require 'httparty'
-
-CHATS = {}
+require 'chat'
 
 get '/' do
   "Hello Homie"
@@ -21,18 +20,15 @@ end
 
 post '/sf911' do
   @message_body = JSON.parse(request.body.string)
-  CHATS[sender_id] ||= {messages:[]}
-  puts "adding message #{message_text}"
-  CHATS[sender_id][:messages] << message_text
-  puts "POST #{response_url}"
-  puts "response data: #{format_response(message_text)}"
+  @chat = Chat.new(sender_id)
+  @chat.add_message message_text
   @response_result = HTTParty.post(
     response_url,
     headers: { 'Content-Type' => 'application/json' },
     body: format_response(message_text).to_json
   )
   puts "raw body: #{@response_result.response.body}"
-  puts "parsed body: #{@response_result.parsed_response["data"]}"
+  puts "parsed body: #{@response_result.parsed_response}"
   200
 end
 
