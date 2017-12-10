@@ -15,3 +15,8 @@ get '/sf911' do
     403
   end
 end
+
+post '/sf911' do
+  puts "GOT WEBHOOK #{request.body}"
+  200
+end
